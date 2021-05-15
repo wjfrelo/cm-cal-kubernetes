@@ -78,12 +78,12 @@ kubectl get pods -l app=nginx
 # Add New Label
 #-------------------------------
  
-kubectl label pods nginx-deployment experimental=true
+kubectl label pods <EnterPodName> experimental=true
 
 #-------------------------------
 # Change Existing Label
 #-------------------------------
-kubectl label pods <EnterPod> app=soaktest --overwrite
+kubectl label pods <EnterPodName> app=soaktest --overwrite
 
 # Pod remains
 kubectl get pods
