@@ -35,7 +35,7 @@ kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl versio
 
 # Run command copied after kubadm init on both Worker nodes
 
-See example: kubeadm join 172.31.10.66:6443 --token 04u3gu.sgankpai65mg3an1 \
+See example: sudo kubeadm join 172.31.10.66:6443 --token 04u3gu.sgankpai65mg3an1 \
     --discovery-token-ca-cert-hash sha256:9062003bf22e7db1f4a1b7d4a001485eebedc7f55c07bc06952b38b7397608e5 
 
 

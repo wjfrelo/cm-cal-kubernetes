@@ -101,7 +101,7 @@ EOF
 kubectl create -f ~/namespace.yaml
 kubectl create namespace prod
 kubectl get namespaces --show-labels
-kubectl delete namespace development
+kubectl delete namespace dev
 
 #-------------------------------:
 # Work in Each Namespace
