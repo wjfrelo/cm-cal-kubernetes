@@ -1,5 +1,9 @@
-#-------------------------------
+################################
 # Create a Pod
+################################
+
+#-------------------------------
+Create PodSpec/Configuration File:
 #-------------------------------
 cat << EOF > ~/sample.yaml
 apiVersion: v1
@@ -18,9 +22,23 @@ spec:
     command: ["watch", "wget", "-qO-", "localhost"]
 EOF
 
-kubectl create -f sample.yaml
+#-------------------------------
+Create Pod Using File
+#-------------------------------
+kubectl create -f ~sample.yaml
 
+#-------------------------------
+Create Pod Using Adhoc Command
+#-------------------------------
 kubectl run tomcat --image=tomcat:8.0
 
+#-------------------------------
+Delete Pod
+#-------------------------------
+kubectl delete pod  tomcat
+
+#-------------------------------
+List Pod
+#-------------------------------
 kubectl get pods
 

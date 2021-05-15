@@ -42,7 +42,7 @@ PodSpec         |-> A Yaml that uses kubernetes.
 
 # Kubernetes objects
 
-Namespaces:-> Are intended for use in environments with many users spread across multiple teams. All Kubernetes objects are namespaced,
+Namespaces|-> Are intended for use in environments with many users spread across multiple teams. All Kubernetes objects are namespaced,
               except PersistentVolumes and Nodes. Users interacting with one namespace do not see the content in another namespace.
               - default The default namespace for objects with no other namespace
               - kube-system The namespace for objects created by the Kubernetes system
@@ -50,7 +50,7 @@ Namespaces:-> Are intended for use in environments with many users spread across
               - kube-node-lease This namespace for the lease objects associated with each node which improves the performance of the node heartbeats as the cluster scales.
 
    
-pods      |-> Pods are the smallest deployable units of computing that you can create and manage in Kubernetes.
+Pods      |-> Pods are the smallest deployable units of computing that you can create and manage in Kubernetes.
               A Pod (as in a pod of whales or pea pod) is a group of one or more containers, with shared storage 
               and network resources, and a specification for how to run the containers. 
               A Pod's contents are always co-located and co-scheduled, and run in a shared context.
