@@ -80,17 +80,23 @@ kubectl get pods -l app=nginx
  
 kubectl label pods nginx-deployment experimental=true
 
-# what if we wanted to change an existing label? 
-kubectl label pods <EnterPod> app=notsoaktest --overwrite
-
-# Removed pod from deployment
-kubectl delete deployment soaktest
+#-------------------------------
+# Change Existing Label
+#-------------------------------
+kubectl label pods <EnterPod> app=soaktest --overwrite
 
 # Pod remains
 kubectl get pods
 
-#  Replace all labels in pods
+#-------------------------------
+# Replace All Labels
+#-------------------------------
 kubectl label pods --all app=notsoaktesteither --overwrite
 
-# Expose Deployment
-kubectl expose deployment --type=NodePort --name=example-service
+#-------------------------------
+# Expose Deployment Label
+#-------------------------------
+kubectl expose deployment nginx-deployment --type=NodePort --name=example-service
+
+# Removed pod from deployment
+kubectl delete deployment nginx-deployment
