@@ -37,7 +37,7 @@ kubectl apply -f ~/nginx-deployment.yaml
 #-------------------------------
 # Verify deployment
 #-------------------------------
-kubectl get deployment
+kubectl get deployment -o wide
 
 #-------------------------------
 # Verify Deployments
