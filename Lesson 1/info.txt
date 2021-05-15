@@ -60,7 +60,7 @@ Pods      |-> Pods are the smallest deployable units of computing that you can c
 PodSpec: A PodSpec defines the containers, environment variables for the container and other properties such as the 
          scheduler name, security context etc.
 
-replicaset:
+Replicaset:
    (1) Improve reliability, load balancing, and scalability for pods
 replication rontroller (replaced by replicaset): a structure that enables you to 
                                                  easily create multiple pods, then make 
