@@ -91,7 +91,7 @@ cat << EOF > ~/namespace.yaml
   "apiVersion": "v1",
   "kind": "Namespace",
   "metadata": {
-    "name": "development",
+    "name": "dev",
     "labels": {
       "name": "development"
     }
@@ -99,6 +99,7 @@ cat << EOF > ~/namespace.yaml
 }
 EOF
 kubectl create -f ~/namespace.yaml
+kubectl create namespace prod
 kubectl get namespaces --show-labels
 kubectl delete namespace development
 
