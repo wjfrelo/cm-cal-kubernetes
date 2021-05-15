@@ -25,7 +25,7 @@ EOF
 #-------------------------------
 Create Pod Using File
 #-------------------------------
-kubectl create -f ~sample.yaml
+kubectl create -f ~/sample.yaml
 
 #-------------------------------
 Create Pod Using Adhoc Command
