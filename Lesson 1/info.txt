@@ -101,7 +101,7 @@ EOF
 kubectl create -f ~/namespace.yaml
 kubectl create namespace prod
 kubectl get namespaces --show-labels
-kubectl delete namespace dev
+
 
 #-------------------------------:
 # Work in Each Namespace
@@ -118,12 +118,13 @@ kubectl config set-context dev --namespace=dev \
 # View all contexts:
 kubectl config view
 
-# Switch namspeces:
+# Switch namespeces:
 kubectl config use-context dev
 
 # Verify current context:
 kubectl config current-context
 
-kubectl run nginx --image=nginx -n mynamespace 
-
+kubectl run nginx --image=nginx -n <EnterNamespace>
+kubectl delete namespace dev
+kubectl config delete-context dev
 

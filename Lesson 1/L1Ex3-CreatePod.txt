@@ -3,7 +3,7 @@
 ################################
 
 #-------------------------------
-Create PodSpec/Configuration File:
+Create PodSpec/Configuration File on Master
 #-------------------------------
 cat << EOF > ~/sample.yaml
 apiVersion: v1
@@ -33,9 +33,10 @@ Create Pod Using Adhoc Command
 kubectl run tomcat --image=tomcat:8.0
 
 #-------------------------------
-Delete Pod
+Delete Pods
 #-------------------------------
-kubectl delete pod  tomcat
+kubectl delete pod tomcat
+kubectl delete pod multi-container
 
 #-------------------------------
 List Pod

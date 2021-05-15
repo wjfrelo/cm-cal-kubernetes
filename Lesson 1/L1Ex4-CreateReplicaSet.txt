@@ -1,6 +1,6 @@
-#-------------------------------
+################################
 # Create a Replica Set
-#-------------------------------
+################################
 
 # selector: defines how we know which pods belong
 # 
@@ -28,11 +28,25 @@ spec:
         image: gcr.io/google_samples/gb-frontend:v3
 EOF
 
+#-------------------------------
+# Create replicaset (manages containers)
+#-------------------------------
+
 kubectl apply -f ~/frontend.yaml
 
+#-------------------------------
+# View replicasets (manages containers)
+#-------------------------------
 kubectl get rs
 
+#-------------------------------
+# View replicaset metadata
+#-------------------------------
 kubectl describe rs/frontend
+
+#-------------------------------
+# Delete replicaset
+#-------------------------------
 kubectl delete rs/frontend
 
 # ReplicaSets are declared in essentially the same way as ReplicationControllers, 
@@ -40,31 +54,37 @@ kubectl delete rs/frontend
 # the rolling-update command works with Replication Controllers
 # This is because Replica Sets are meant to be used as the backend for Deployments
 
-# Replication Controller 
+#-------------------------------
+# Create replica controller (manages containers)
+#------------------------------- 
 
 cat << EOF >> rc.yml
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: soaktestrc
+  name: simplewebserver
 spec:
   replicas: 3
   selector:
-    app: soaktestrc
+    app: simplewebserver
   template:
     metadata:
-      name: soaktestrc
+      name: simplewebserver
       labels:
-        app: soaktestrc
+        app: simplewebserver
     spec:
       containers:
-      - name: soaktestrc
-        image: nickchase/soaktest
+      - name: simplewebserver
+        image: nginx
         ports:
         - containerPort: 80
 EOF
 
 kubectl create -f rc.yaml
-kubectl describe rc soaktestrc
+
+#-------------------------------
+# View replica controller Metadata
+#------------------------------- 
+kubectl describe rc simplewebserver
 kubectl get pods
-kubectl delete rc soaktestrc
+kubectl delete rc simplewebserver
