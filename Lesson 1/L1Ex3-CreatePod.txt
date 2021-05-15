@@ -31,7 +31,7 @@ kubectl create -f ~/sample.yaml
 Create Pod Using Adhoc Command
 #-------------------------------
 kubectl run tomcat --image=tomcat:8.0
-kubectl get pods
+kubectl get pods -o wide
 
 #-------------------------------
 Delete Pods

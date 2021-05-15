@@ -128,3 +128,5 @@ kubectl run nginx --image=nginx -n <EnterNamespace>
 kubectl delete namespace dev
 kubectl config delete-context dev
 
+# After all is log back into default context
+kubectl config use-context kubernetes-admin@kubernetes

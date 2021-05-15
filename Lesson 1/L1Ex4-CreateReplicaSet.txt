@@ -32,7 +32,7 @@ EOF
 # Create replicaset (manages containers)
 #-------------------------------
 
-kubectl apply -f ~/frontend.yaml
+kubectl apply -f ~/frontend.yml
 
 #-------------------------------
 # View replicasets (manages containers)
@@ -80,7 +80,7 @@ spec:
         - containerPort: 80
 EOF
 
-kubectl create -f rc.yaml
+kubectl create -f rc.yml
 
 #-------------------------------
 # View replica controller Metadata
