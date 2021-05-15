@@ -16,23 +16,18 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nginx
+      app: nginx-deployment
   template:
     metadata:
       labels:
-        app: nginx
+        app: nginx-deployment
     spec:
       containers:
-      - name: nginx
+      - name: nginx-deployment
         image: nginx:1.14.2
         ports:
         - containerPort: 80
 EOF
--minReadySeconds can be set to allow resources to load before minReadySeconds
--RollingUpdateStrategy: meaning that when we’re updating the Deployment, we can 
-                        have up to 1 missing pod before it’s replaced, and 1 maxSurge, 
-                        meaning we can have one extra pod as we scale the new pods back up. 
--NewReplicaSet: The deployment is backed, in this case, by Replica Set
 
 #-------------------------------
 # Create deployment
