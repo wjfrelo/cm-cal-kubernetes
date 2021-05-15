@@ -1,0 +1,44 @@
+################################
+# Setup Kubernetes Cluster
+################################
+
+#-------------------------------
+# Initilize new cluster (already installed). Set back to "factory settings"
+#-------------------------------
+# Note: Copy the kubeadm join comand that is produced
+sudo kubeadm reset
+sudo kubeadm init
+
+example: kubeadm join 172.31.10.66:6443 --token 04u3gu.sgankpai65mg3an1 \
+    --discovery-token-ca-cert-hash sha256:9062003bf22e7db1f4a1b7d4a001485eebedc7f55c07bc06952b38b7397608e5 
+
+#-------------------------------
+# Configure kubectl
+#-------------------------------
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config 
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# View cluster nodes using kubectl
+kubectl get nodes
+
+#-------------------------------
+# Join other nodes to the cluster
+#-------------------------------
+
+# Run command copied after kubadm init on both Worker nodes
+
+See example: kubeadm join 172.31.10.66:6443 --token 04u3gu.sgankpai65mg3an1 \
+    --discovery-token-ca-cert-hash sha256:9062003bf22e7db1f4a1b7d4a001485eebedc7f55c07bc06952b38b7397608e5 
+
+#-------------------------------
+# Create a Kubernetes Network from Master Node
+#-------------------------------
+
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 |tr -d '\n')"
+
+#-------------------------------
+# Verify all nodes joined
+#-------------------------------
+kubectl get nodes

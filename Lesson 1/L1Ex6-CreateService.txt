@@ -1,0 +1,63 @@
+
+cat << EOF > ~/service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-service
+  labels:
+    app: example-service
+spec:
+  ports:
+  - port: 80
+    targetPort: 4000
+  type: NodePort
+  selector:
+    app: example-pod
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: example-replica
+  labels:
+    app: example-replica
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: example-pod
+    spec:
+      containers:
+      - name: example-container
+        image: zlabjp/docker-example:release-0.1.0
+        ports:
+        - containerPort: 4000
+EOF
+
+kubectl apply -f service.yaml
+kubectl get service
+# Create Adhoc Service
+kubectl expose replicationcontroller/example-replica
+
+# List new services
+kubectl get services
+
+# Services can be exposed in different ways by specifying a type in the ServiceSpec:
+ClusterIP (default) - Exposes the Service on an internal IP in the cluster. This type 
+                      makes the Service only reachable from within the cluster.
+NodePort - Exposes the Service on the same port of each selected Node in the cluster using NAT. 
+           Makes a Service accessible from outside the cluster using <NodeIP>:<NodePort>. Superset of ClusterIP.
+LoadBalancer - Creates an external load balancer in the current cloud (if supported) and assigns a fixed, 
+               external IP to the Service. Superset of NodePort.
+ExternalName - Maps the Service to the contents of the externalName field (e.g. `foo.bar.example.com`), 
+               by returning a CNAME record with its value. No proxying of any kind is set up. This 
+               type requires v1.7 or higher of kube-dns, or CoreDNS version 0.0.8 or higher.
+
+# kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080
+# kubectl describe services/kubernetes-bootcamp
+
+# Create environment variable:
+export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
+curl $(minikube ip):$NODE_PORT
+
+# Scaling is accomplished by changing the number of replicas in a Deployment

@@ -1,0 +1,70 @@
+#-------------------------------
+# Create a Replica Set
+#-------------------------------
+
+# selector: defines how we know which pods belong
+# 
+cat << EOF > ~/frontend.yml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google_samples/gb-frontend:v3
+EOF
+
+kubectl apply -f ~/frontend.yaml
+
+kubectl get rs
+
+kubectl describe rs/frontend
+kubectl delete rs/frontend
+
+# ReplicaSets are declared in essentially the same way as ReplicationControllers, 
+#  except that they have more options for the selector.
+# the rolling-update command works with Replication Controllers
+# This is because Replica Sets are meant to be used as the backend for Deployments
+
+# Replication Controller 
+
+cat << EOF >> rc.yml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: soaktestrc
+spec:
+  replicas: 3
+  selector:
+    app: soaktestrc
+  template:
+    metadata:
+      name: soaktestrc
+      labels:
+        app: soaktestrc
+    spec:
+      containers:
+      - name: soaktestrc
+        image: nickchase/soaktest
+        ports:
+        - containerPort: 80
+EOF
+
+kubectl create -f rc.yaml
+kubectl describe rc soaktestrc
+kubectl get pods
+kubectl delete rc soaktestrc

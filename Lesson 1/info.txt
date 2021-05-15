@@ -1,0 +1,128 @@
+################################
+# Core Concepts
+################################
+
+# Merging ECR with Kubernetes
+- ECR Reference: https://kubernetes.io/docs/tasks/kubelet-credential-provider/kubelet-credential-provider/
+- API Reference: https://v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#pod-v1-core
+
+#-------------------------------
+# Interact with Kubernetes Cluster
+#-------------------------------
+kubeadm        |->  The command to bootstrap the cluster. 
+
+kubectl        |->  The component that runs on all of the machines in 
+                    your cluster and provides the primary way to interact with the
+                    the cluster components/objects (pods, namespaces, services, etc...).
+                    # Cheat commands: https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+kubelet        |->  The primary "node agent" that runs on each node. The primary agent that runs on each node. 
+                    The kubelet takes a set of PodSpecs and ensures that the described containers are running and healthy.
+
+kube-apiserver |-> REST API that validates and configures data for API objects such as pods, services, replication controllers.
+
+kube-controller-manager| -> Daemon that embeds the core control loops shipped with Kubernetes. In Kubernetes, a controller is a 
+                            control loop that watches the shared state of the cluster through the apiserver and makes changes 
+                            attempting to move the current state towards the desired state.
+
+kube-proxy     |-> Can do simple TCP/UDP stream forwarding or round-robin TCP/UDP forwarding across a set of back-ends.
+                   runs on each node. This reflects services as defined in the Kubernetes API on each node and can do simple 
+                   TCP, UDP, and SCTP stream forwarding or round robin TCP, UDP, and SCTP forwarding across a set of backends.
+
+kube-scheduler |-> Scheduler that manages availability, performance, and capacity. a control plane process which assigns 
+    `              Pods to Nodes. The scheduler determines which Nodes are valid placements for each Pod in the scheduling 
+                   queue according to constraints and available resources.
+
+#-------------------------------
+# Kubernetes Object Creation Methods
+#-------------------------------
+
+Adhoc Command   |-> Command using kubectl command function
+PodSpec         |-> A Yaml that uses kubernetes. 
+
+# Kubernetes objects
+
+Namespaces:-> Are intended for use in environments with many users spread across multiple teams. All Kubernetes objects are namespaced,
+              except PersistentVolumes and Nodes. Users interacting with one namespace do not see the content in another namespace.
+              - default The default namespace for objects with no other namespace
+              - kube-system The namespace for objects created by the Kubernetes system
+              - kube-public This namespace is created automatically and is readable by all users (including those not authenticated). This namespace is mostly reserved for cluster usage, in case that some resources should be visible and readable publicly throughout the whole cluster. The public aspect of this namespace is only a convention, not a requirement.
+              - kube-node-lease This namespace for the lease objects associated with each node which improves the performance of the node heartbeats as the cluster scales.
+
+   
+pods      |-> Pods are the smallest deployable units of computing that you can create and manage in Kubernetes.
+              A Pod (as in a pod of whales or pea pod) is a group of one or more containers, with shared storage 
+              and network resources, and a specification for how to run the containers. 
+              A Pod's contents are always co-located and co-scheduled, and run in a shared context.
+              Pods are considered to be relatively ephemeral (rather than durable) entities
+
+
+PodSpec: A PodSpec defines the containers, environment variables for the container and other properties such as the 
+         scheduler name, security context etc.
+
+replicaset:
+   (1) Improve reliability, load balancing, and scalability for pods
+replication rontroller (replaced by replicaset): a structure that enables you to 
+                                                 easily create multiple pods, then make 
+                                                 sure that that number of pods always exists. 
+                                                 If a pod does crash, the Replication Controller 
+                                                 replaces it. 
+   (2) The Horizontal Pod Autoscaler automatically scales the number of Pods in a replication controller, 
+       deployment, replica set or stateful set based on observed CPU utilization (or, with custom metrics 
+       support, on some other application-provided metrics). Note that Horizontal Pod Autoscaling does not 
+       apply to objects that can't be scaled, for example, DaemonSets.
+replicaset: Scales the app
+
+deployment:  Intended to replace Replication Controllers in that they provides  the same replication functions 
+             (through Replica Sets) and also the ability to rollout changes and roll them back if necessary. 
+             Manages the underlying replica sets for you. Provides declarative updates for Pods and ReplicaSets.
+
+service:  A Service routes traffic across a set of Pods. Services are the abstraction that allow pods 
+          to die and replicate in Kubernetes without impacting your application. Discovery and routing 
+          among dependent Pods (such as the frontend and backend components in an application) 
+          is handled by Kubernetes Services. Services match a set of Pods using labels and selectors
+
+#-------------------------------
+# Create namespace for dev, staging, prod
+#-------------------------------:
+Repeat for dev, staging, and prod 
+cat << EOF > ~/namespace.yaml
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "name": "development",
+    "labels": {
+      "name": "development"
+    }
+  }
+}
+EOF
+kubectl create -f ~/namespace.yaml
+kubectl get namespaces --show-labels
+kubectl delete namespace development
+
+#-------------------------------:
+# Work in Each Namespace
+#-------------------------------:
+
+# View kubectl context (Get current context cluster and user) 
+kubectl config view
+
+# Create namespace context for dev, staging, and prod:
+kubectl config set-context dev --namespace=dev \
+  --cluster=<Enter Context Cluster> \
+  --user=<Enter Context User>
+
+# View all contexts:
+kubectl config view
+
+# Switch namspeces:
+kubectl config use-context dev
+
+# Verify current context:
+kubectl config current-context
+
+kubectl run nginx --image=nginx -n mynamespace 
+
+

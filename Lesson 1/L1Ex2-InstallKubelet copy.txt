@@ -1,0 +1,10 @@
+################################
+# Install Kubelet using Kubeadm on Worker Nodes
+################################
+
+sudo snap install docker
+
+sudo docker run -d --restart=always -e DOMAIN=cluster --name nginx-app -p 80:80 nginx
+sudo docker image ls
+sudo docker ps
+
