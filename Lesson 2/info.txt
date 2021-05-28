@@ -1,0 +1,21 @@
+What is Scheduling?
+#######################
+Scheduling refers to making sure that Pods are matched to Nodes so that Kubelet can run them
+
+- A scheduler watches for newly created Pods that have no Node assigned. For every Pod that the 
+  scheduler discovers, the scheduler becomes responsible for finding the best Node for that Pod 
+  to run on. The scheduler reaches this placement decision taking into account the scheduling 
+  principles described below.
+
+- Feasible Node: A node that is capable of meeting the demands of a pod. If no feasible nodes are found, pods
+                 are not scheduled. Kubernetes runs functions to score the feasible Nodes and picks a 
+                 Node with the highest score among the feasible ones to run the Pod.
+                 Scoring factors include collective resource requirements, hardware / software / 
+                 policy constraints, affinity and anti-affinity specifications, data locality, 
+                 inter-workload interference.
+- Manually schedule:
+                - You set the paramters/factors for a pod to run on a node. This is done through the spec.             
+
+- Default Scheduler: The "Kube Scheduler" runs as a part of the control plan
+
+
