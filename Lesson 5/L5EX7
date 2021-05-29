@@ -1,0 +1,20 @@
+Backup and Restore Etcd
+
+sudo apt install etcd-client
+kubectl get pods -n kube-system
+kubectl describe pods <etcd-pod-name> -n kube-system
+export advertise_url=<advertise-client-url>
+
+sudo ETCDCTL_API=3 etcdctl --endpoints $advertise_url --cacert \
+/etc/kubernetes/pki/etcd/ca.crt --key \
+/etc/kubernetes/pki/etcd/server.key --cert \
+/etc/kubernetes/pki/etcd/server.crt snapshot save mysnap.db
+
+ls -ls
+
+file mysnap.db
+
+sudo ETCDCTL_API=3 etcdctl --endpoints $advertise_url --cacert \
+/etc/kubernetes/pki/etcd/ca.crt --key \
+/etc/kubernetes/pki/etcd/server.key --cert \
+/etc/kubernetes/pki/etcd/server.crt snapshot restore mysnap.db

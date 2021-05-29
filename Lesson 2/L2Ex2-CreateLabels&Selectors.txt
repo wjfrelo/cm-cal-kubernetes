@@ -1,0 +1,98 @@
+######################################
+# Labels and Selectors in Replica Set
+######################################
+
+Replica Set: Maintain a stable set of replica Pods running at any 
+             given time. As such, it is often used to guarantee the 
+             availability of a specified number of identical Pods.
+
+Why ReplicaSets: A ReplicaSet ensures that a specified number of pod replicas 
+                 are running at any given time. However, a Deployment is a higher-level 
+                 concept that manages ReplicaSets and provides declarative updates to Pods 
+                 along with a lot of other useful features. Deployments recommended 
+                 instead of directly using ReplicaSets, unless you require custom u
+                 update orchestration or don't require updates at all.
+
+How: A ReplicaSet is linked to its Pods via the Pods metadata. Pods are aquired by using 
+     the ReplicaSet' selector. 
+     
+#--------------------------
+# Create ReplicaSet Yaml
+#--------------------------
+
+cat << EOF > replicaset.yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontendapp
+  labels:
+    app: guestbook
+    tier: frontendapp
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontendapp
+  template:
+    metadata:
+      labels:
+        tier: frontendapp
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google_samples/gb-frontend:v3
+EOF
+
+#--------------------------
+# Deploy and verify replicaset pod
+#--------------------------
+kubectl create -f replicaset.yaml
+kubectl get rs
+
+#--------------------------
+# Add to ReplicaSet
+#--------------------------
+
+cat << EOF > replicaset-extra.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+  labels:
+    # Apart of new replicaset
+    tier: frontenda
+spec:
+  containers:
+  - name: student1
+    image: gcr.io/google-samples/hello-app:2.0
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod2
+  # Apart of existing replicaset
+  labels:
+    tier: frontend
+spec:
+  containers:
+  - name: student2
+    image: gcr.io/google-samples/hello-app:1.0
+EOF
+
+#--------------------------
+# Deploy and verify replicaset pod
+#--------------------------
+kubectl create -f replicaset-extra.yaml
+kubectl get rs 
+
+# Get Information Related to One ReplicaSet
+kubectl describe rs frontend
+
+kubectl get rs
+kubectl delete replicaset frontend
+cat replica.yaml
+
+How does labels and selectors work?

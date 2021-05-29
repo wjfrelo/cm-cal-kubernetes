@@ -1,0 +1,28 @@
+Introduction to RBAC Authorization
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+
+kubectl get all -n kubernetes-dashboard
+
+kubectl get svc -n kubernetes-dashboard
+
+kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+
+●	Update the Type from ClusterIP to NodePort
+type: NodePort
+
+# ●	List the running services to check the Type of kubernetes-dashboard service
+kubectl get svc -n kubernetes-dashboard
+
+# ●	List all the running nodes to get the Internal IP Address of the master node
+kubectl get nodes -o wide
+
+# Copy the Internal-IP of the master node.
+
+enter the following url:
+https://Internal-IP:Service-Port
+
+kubectl -n kubernetes-dashboard describe secret \
+$(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')
+
+# Include followow instructions

@@ -1,0 +1,9 @@
+Working of kube-apiserver
+
+kubectl get pods -n kube-system
+
+kubectl describe pods kube-apiserver-<MASTER-NODE-IP-ADDRESS> -n kube-system
+
+sudo docker service create --name redis redis:3.0.6
+sudo docker service scale redis=10
+sudo docker service ls

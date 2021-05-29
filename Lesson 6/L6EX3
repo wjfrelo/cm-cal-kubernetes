@@ -1,0 +1,18 @@
+Update ClusterRoleBinding of a ServiceAccount in RBAC Authorization
+
+Need GUI
+
+kubectl get clusterrolebindings
+
+kubectl get clusterrolebindings kubernetes-dashboard -o yaml > crb.yml
+
+●	Update the crb.yml file to edit the ClusterRole to cluster-admin
+vi crb.yml
+
+kubectl delete -f crb.yml
+
+kubectl create -f crb.yml
+
+kubectl get clusterrolebinding
+
+https://Internal-IP:Service-Port

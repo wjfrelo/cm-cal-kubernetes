@@ -1,16 +1,6 @@
-############################################
-# Schedule a Pod Manually
-############################################
-# Answer the following questions:
-- How many APIs are being setup with this one spec?
-- 
-# Review the following links to support:
-- https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#deployment-v1-apps
+Working with kube-controller-manager & kube-scheduler
 
-
-# Create scheduler config file/specification
-#--------------------------------------------
-cat << EOF >> ~/manual-scheduler.yaml
+cat > my-scheduler.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -79,6 +69,5 @@ spec:
       hostPID: false
       volumes: []
 
-
-kubectl create -f manual-scheduler.yaml
+kubectl create -f my-scheduler.yaml
 kubectl get pods --namespace=kube-system

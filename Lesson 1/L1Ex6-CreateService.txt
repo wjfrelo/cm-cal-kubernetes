@@ -1,4 +1,10 @@
+################################
+# Create a Service
+################################
 
+#-------------------------------
+# Create specification file
+#-------------------------------
 cat << EOF > ~/service.yml
 apiVersion: v1
 kind: Service
@@ -34,12 +40,24 @@ spec:
         - containerPort: 4000
 EOF
 
+#-------------------------------
+# Create service
+#-------------------------------
 kubectl apply -f service.yaml
+
+#-------------------------------
+# Verify service created
+#-------------------------------
 kubectl get service
-# Create Adhoc Service
+
+#-------------------------------
+# Exposen repllication controller to ports
+#-------------------------------
 kubectl expose replicationcontroller/example-replica
 
-# List new services
+#-------------------------------
+# Create specification file
+#-------------------------------
 kubectl get services
 
 # Services can be exposed in different ways by specifying a type in the ServiceSpec:

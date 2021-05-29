@@ -1,0 +1,18 @@
+Lesson 2 Demo 5: Working with Docker Commands
+
+You can use the kubectl commands to interact with the API Server. 
+Using kubectl is straightforward if you are familiar with the docker command line tool. 
+However, there are a few differences between the docker commands and the kubectl commands
+
+sudo docker run -d --restart=always \
+-e DOMAIN=cluster --name nginx-app -p 80:80 nginx
+sudo docker ps -a 
+(Check the container id of the ngnix container and copy it)
+sudo docker stop <containerId>
+sudo docker rm <containerId>
+sudo docker attach <containerId>
+sudo docker logs -f <container id>
+sudo docker stop <container id>
+sudo docker rm <container id> 
+sudo docker version
+sudo docker info

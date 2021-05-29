@@ -1,0 +1,3 @@
+Draining a Node
+kubectl get nodes
+kubectl drain <NODE_NAME> --ignore-daemonsets --force

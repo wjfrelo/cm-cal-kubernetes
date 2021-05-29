@@ -1,0 +1,139 @@
+############################################
+# Lesson 2 Demo 6: Multiple Scheduler
+############################################
+
+Note: You can even run multiple schedulers simultaneously alongside the 
+default scheduler and instruct Kubernetes what scheduler to use for each of your pods
+
+Scheduler 1: kube-scheduler binary
+Scheduler 2: Custome schedulers
+
+spec.schedulerName an option to designate an image to a scheduler.
+
+# Build the Kube-Scheduler Library
+mkdir ~/kube-scheduler
+
+cat << EOF >> ~/kube-scheduler/Dockerfile
+FROM busybox
+ADD ./_output/local/bin/linux/amd64/kube-scheduler /usr/local/bin/kube-scheduler
+EOF
+
+sudo docker build -t gcr.io/my-gcp-project/my-kube-scheduler:1.0 .
+
+cat << EOF >> ~/my-scheduler.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-scheduler
+  namespace: kube-system
+---                     # Creates service account that bing to schduler
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: my-scheduler-as-kube-scheduler
+subjects:
+- kind: ServiceAccount
+  name: my-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:kube-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: my-scheduler-as-volume-scheduler
+subjects:
+- kind: ServiceAccount
+  name: my-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:volume-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: scheduler
+    tier: control-plane
+  name: my-scheduler
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      component: scheduler
+      tier: control-plane
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: scheduler
+        tier: control-plane
+        version: second
+    spec:
+      serviceAccountName: my-scheduler
+      containers:
+      - command:
+        - /usr/local/bin/kube-scheduler
+        - --address=0.0.0.0
+        - --leader-elect=false
+        - --scheduler-name=my-scheduler
+        image: gcr.io/my-gcp-project/my-kube-scheduler:1.0
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 10251
+          initialDelaySeconds: 15
+        name: kube-second-scheduler
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 10251
+        resources:
+          requests:
+            cpu: '0.1'
+        securityContext:
+          privileged: false
+        volumeMounts: []
+      hostNetwork: false
+      hostPID: false
+      volumes: []
+EOF
+
+
+
+kubectl get pods --namespace=kube-system
+
+cat << EOF >> pod1.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: no-annotation
+  labels:
+    name: multischeduler-example
+spec:
+  containers:
+  - name: pod-with-no-annotation-container
+    image: k8s.gcr.io/pause:2.0
+EOF
+
+kubectl create -f pod1.yaml
+
+cat << EOF >> pod2.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: annotation-default-scheduler
+  labels:
+    name: multischeduler-example
+spec:
+  schedulerName: default-scheduler
+  containers:
+  - name: pod-with-default-annotation-container
+    image: k8s.gcr.io/pause:2.0
+EOF
+
+kubectl create -f pod2.yaml

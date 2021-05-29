@@ -1,0 +1,14 @@
+Peforming Server Maintenance
+###############################
+Eviction API: https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/#eviction-api
+
+https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/#eviction-api
+kubectl get nodes
+kubectl cordon <NODE_NAME>
+
+# Drain Nodes
+kubectl drain <NODE_NAME> --ignore-daemonsets --force
+
+Exit Maintanance Mode
+kubectl get nodes
+kubectl uncordon <NODE_NAME>

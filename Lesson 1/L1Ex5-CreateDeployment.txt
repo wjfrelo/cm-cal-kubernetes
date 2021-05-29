@@ -1,4 +1,4 @@
-################################-
+################################
 # Create a Deployment
 ################################
 
@@ -66,13 +66,13 @@ kubectl scale --replicas=7 deployment/nginx-deployment
 #-------------------------------
 # View Replicasets
 #-------------------------------
-kubectl describe deployment deployment/nginx-deployment 
+kubectl describe deployment nginx-deployment 
 kubectl describe replicaset <EnterReplicaSet>
 
 #-------------------------------
 # Get Info by Pod Label
 #-------------------------------
-kubectl get pods -l app=nginx
+kubectl get pods -l app=nginx-deployment
 
 #-------------------------------
 # Add New Label
@@ -98,5 +98,10 @@ kubectl label pods --all app=notsoaktesteither --overwrite
 #-------------------------------
 kubectl expose deployment nginx-deployment --type=NodePort --name=example-service
 
+# Verify Port Opened
+kubectl get services example-service
+
 # Removed pod from deployment
 kubectl delete deployment nginx-deployment
+
+# Kill remaining pods

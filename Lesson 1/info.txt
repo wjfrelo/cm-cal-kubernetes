@@ -130,3 +130,7 @@ kubectl config delete-context dev
 
 # After all is log back into default context
 kubectl config use-context kubernetes-admin@kubernetes
+
+# View deleted pod
+kubectl get pod -o go-template='{{range.status.containerStatuses}}\
+{{"Container Name: "}}{{.name}}{{"\r\nLastState: "}}{{.lastState}}{{end}}'  <enterPodName>

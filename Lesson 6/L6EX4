@@ -1,0 +1,26 @@
+Create Custom ClusterRole and ClusterRoleBinding
+
+kubectl create clusterrole custom-cluster-role --verb=list --verb=get \
+--verb=delete --resource=pods --resource=services --resource=deployments
+
+kubectl get clusterrole
+
+kubectl get clusterrole custom-cluster-role view -o yaml
+
+kubectl create serviceaccount custom-service-account
+
+kubectl get sa
+
+kubectl get sa custom-service-account -o yaml
+
+kubectl create clusterrolebinding custom-clusterrole-binding \
+--clusterrole=custom-cluster-role --serviceaccount=default:custom-service-account
+
+kubectl get clusterrolebinding
+
+>> kubectl auth can-i delete pods \
+--as=system:serviceaccount:default:custom-service-account
+>> kubectl auth can-i list services \
+--as=system:serviceaccount:default:custom-service-account
+>> kubectl auth can-i delete configmaps \
+--as=system:serviceaccount:default:custom-service-account

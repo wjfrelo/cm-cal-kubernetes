@@ -1,1 +1,76 @@
 
+Create a Pod with Resource Requirements and Limits
+
+If the node/namespace where a Pod is running has enough of a resource available, 
+it's possible (and allowed) for a container to use more resource than its request 
+for that resource specifies. However, a container is not allowed to use more than 
+its resource limit.
+
+- If a memory limit of 4GiB is set for a Container, the kubelet (and container runtime) 
+  enforce the limit
+- Limits can be implemented either reactively (the system intervenes once it sees a violation) 
+  or by enforcement (the system prevents the container from ever exceeding the limit).
+- CPU represents compute processing and can be specified in fractional limits. Memory is specified in
+  units of bytes
+
+#--------------------------------
+# Determine Node Capacity
+#--------------------------------
+
+kubectl describe nodes
+
+#--------------------------------
+# Create Resource Constrained Namespace (Simulate node capacity)
+#--------------------------------#
+
+cat << EOF >> cpu-limit.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+spec:
+  containers:
+  - name: app
+    image: images.my-company.example/app:v4
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+  - name: log-aggregator
+    image: images.my-company.example/log-aggregator:v6
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+EOF
+
+kubectl create namespace cpu-example
+
+cat << EOF >> cpu-request-limit.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cpu-demo
+  namespace: cpu-example
+spec:
+  containers:
+  - name: cpu-demo-ctr
+    image: vish/stress
+    resources:
+      limits:
+        cpu: "1"
+      requests:
+        cpu: "0.5"
+    args:
+    - -cpus
+    - "2"
+EOF
+
+kubectl apply -f cpu-request-limit.yaml
+kubectl get pod cpu-demo --namespace=cpu-example

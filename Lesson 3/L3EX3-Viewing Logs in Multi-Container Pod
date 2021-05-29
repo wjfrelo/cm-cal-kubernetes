@@ -1,0 +1,7 @@
+Lesson 3 Demo 3: Viewing Logs in Multi-Container Pod
+
+kubectl get pods
+
+kubectl logs <podname>
+
+kubectl logs -f <podname>

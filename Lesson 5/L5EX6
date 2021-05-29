@@ -1,0 +1,12 @@
+Backup Resource Configs
+
+kubectl create deployment mydep --image=docker.io/httpd
+kubectl get pods
+kubectl get deployment
+kubectl get deployment mydep -o yaml > mydepback.yml
+cat mydepback.yml
+
+kubectl create service nodeport myservice --tcp=80:80
+kubectl get services
+kubectl get service myservice -o yaml > myserviceback.yml
+cat myserviceback.yml

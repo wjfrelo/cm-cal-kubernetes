@@ -1,0 +1,140 @@
+####################################
+# Deployment Rolling Update Using kubectl rollout
+####################################
+Consolidates L4EX1 - L4EX4
+- Each time a new Deployment is observed by the Deployment controller, a ReplicaSet is created to 
+  bring up the desired # of Pods
+- If you update a Deployment while an existing rollout is in progress, the Deployment creates a 
+  new ReplicaSet as per the update and start scaling that up, and rolls over the ReplicaSet that
+  it was scaling up previously -- it will add it to its list of old ReplicaSets (kubect get rs) and start scaling it down.
+
+Valuable Links: 
+(1) Peforming Canary Deployments/Rollouts: https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#canary-deployments
+(2) Blue/Gree Deployments/Rollouts: https://www.ianlewis.org/en/bluegreen-deployments-kubernetes 
+
+#------------------------------------
+# Deployment Information:
+# - Creates a Deployment named nginx-deployment
+# - Creates three replicated Pods
+# - Selector field defines how the Deployment finds which Pods to manage
+#------------------------------------
+
+cat << EOF > nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment # name of pod
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:         # Match labels matches template labels. 
+      app: nginx         # This is how it knows which pods to manage.
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec: # One container
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+EOF
+
+kubectl apply -f nginx-deployment.yaml
+
+#---------------------------
+# Verify Deployment
+#---------------------------
+
+kubectl get deployments 
+kubectl describe deployments nginx-deployment
+
+#---------------------------
+# Verify Deployment rollout
+#---------------------------
+kubectl rollout status deployment/nginx-deployment
+kubectl get rs        # View deployment replicaset
+kubectl get pods --show-labels      # view pod labels
+
+#---------------------------
+# Change Deployment and Container version on the Fly
+#---------------------------
+kubectl --record deployment.apps/nginx-deployment set image deployment.v1.apps/nginx-deployment nginx=nginx:1.16.1
+kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
+
+#---------------------------
+# Change Resources on the Fly
+#---------------------------
+kubectl set resources deployment.v1.apps/nginx-deployment -c=nginx --limits=cpu=200m,memory=512Mi
+
+#---------------------------
+# Change Deployment and Rollout
+#--------------------------- 
+
+Edit the Yaml and change conttainer to nginx version 1.19.1
+
+#---------------------------
+# Verify the change
+#---------------------------
+kubectl rollout history deployment.v1.apps/nginx-deployment
+kubectl rollout status deployment.v1.apps/nginx-deployment
+
+# Remember, how rollout and changes happen is important. 
+
+#---------------------------
+# Pause rollout
+#---------------------------
+kubectl rollout pause deployment.v1.apps/nginx-deployment
+kubectl describe deployment
+
+#---------------------------
+# Resume rollout
+#---------------------------
+kubectl rollout resume deployment.v1.apps/nginx-deployment
+kubectl describe deploymentkubectl rollout history deployment.v1.apps/nginx-deployment --revision=2
+
+#---------------------------
+# Check Rollout history
+#---------------------------
+kubectl rollout history deployment.v1.apps/nginx-deployment
+kubectl rollout history deployment.v1.apps/nginx-deployment --revision=2
+
+#---------------------------
+# Rollback Deployment Previous Version
+#---------------------------
+kubectl rollout undo deployment.v1.apps/nginx-deployment
+kubectl rollout history deployment.v1.apps/nginx-deployment
+kubectl describe deployment
+
+#---------------------------
+# Rollback Deployment To Specific version
+#---------------------------
+kubectl rollout undo deployment.v1.apps/nginx-deployment --to-revision=2
+kubectl rollout history deployment.v1.apps/nginx-deployment
+kubectl describe deployment
+
+#---------------------------
+# Scale Deployment Up/Down
+#---------------------------
+kubectl autoscale deployment.v1.apps/nginx-deployment --min=10 --max=15 --cpu-percent=80
+kubectl describe deployment
+
+#---------------------------
+# Why Rollouts Fail
+#---------------------------
+- Insufficient quota
+- Readiness probe failures
+- Image pull errors
+- Insufficient permissions
+- Limit ranges
+- Application runtime misconfiguration
+
+#---------------------------
+# Failure Detection (Adds "failure" information to metadata)
+#---------------------------
+kubectl patch deployment.v1.apps/nginx-deployment -p '{"spec":{"progressDeadlineSeconds":600}}'
+kubectl describe deployment nginx-deployment
+

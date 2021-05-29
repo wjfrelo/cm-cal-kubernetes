@@ -1,0 +1,7 @@
+Uncordon a Node
+
+kubectl get nodes
+
+kubectl uncordon <NODE_NAME>
+
+kubectl get nodes

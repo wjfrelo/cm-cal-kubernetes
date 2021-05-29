@@ -1,0 +1,43 @@
+####################################
+# Create a multi container pod which access same volume
+####################################
+
+cat << EOF > two-container-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: two-containers
+spec:
+
+  restartPolicy: Never
+
+  volumes:
+  - name: shared-data
+    emptyDir: {}
+
+  containers:
+
+  - name: nginx-container
+    image: nginx
+    volumeMounts:
+    - name: shared-data
+      mountPath: /usr/share/nginx/html
+
+  - name: debian-container
+    image: debian
+    volumeMounts:
+    - name: shared-data
+      mountPath: /pod-data
+    command: ["/bin/sh"]
+    args: ["-c", "echo Hello from the debian container > /pod-data/index.html"]
+EOF
+
+kubectl apply -f two-container-pod.yaml
+kubectl get pod two-containers --output=yaml
+
+Answer the Question:
+
+How many pods are there?
+How many containers are there?
+Are pods or containers sharing data/volumes?
+How are they sharing data/volumes (i.e. which properties)?

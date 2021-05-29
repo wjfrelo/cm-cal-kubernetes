@@ -7,6 +7,10 @@ Scheduling refers to making sure that Pods are matched to Nodes so that Kubelet 
   to run on. The scheduler reaches this placement decision taking into account the scheduling 
   principles described below.
 
+- The Kubernetes scheduler is a control plane process which assigns Pods to Nodes. The scheduler 
+  determines which Nodes are valid placements for each Pod in the scheduling queue according to 
+  constraints and available resources. 
+
 - Feasible Node: A node that is capable of meeting the demands of a pod. If no feasible nodes are found, pods
                  are not scheduled. Kubernetes runs functions to score the feasible Nodes and picks a 
                  Node with the highest score among the feasible ones to run the Pod.
