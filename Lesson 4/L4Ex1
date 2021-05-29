@@ -10,7 +10,7 @@ Consolidates L4EX1 - L4EX16
 
 Valuable Links: 
 (1) Peforming Canary Deployments/Rollouts: https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#canary-deployments
-(2) Blue/Gree Deployments/Rollouts: https://www.ianlewis.org/en/bluegreen-deployments-kubernetes 
+(2) Blue/Green Deployments/Rollouts: https://www.ianlewis.org/en/bluegreen-deployments-kubernetes 
 (3) Rollout Strategies: https://blog.container-solutions.com/kubernetes-deployment-strategies
 
 #------------------------------------
