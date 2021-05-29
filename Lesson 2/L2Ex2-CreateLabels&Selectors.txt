@@ -27,17 +27,17 @@ metadata:
   name: frontendapp
   labels:
     app: guestbook
-    tier: frontendapp
+    tier: frontend
 spec:
   # modify replicas according to your case
   replicas: 3
   selector:
     matchLabels:
-      tier: frontendapp
+      tier: frontend
   template:
     metadata:
       labels:
-        tier: frontendapp
+        tier: frontend
     spec:
       containers:
       - name: php-redis
