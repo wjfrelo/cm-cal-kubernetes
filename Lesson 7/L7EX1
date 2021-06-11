@@ -1,6 +1,14 @@
-############################################
+###########################################
 # Create a Volume with Declarative (YAML)
 ############################################
+#------------------------------------
+# Create supporting mount directories
+#------------------------------------
+mkdir -p /tmp/data /data /cache /mnt/data
+
+#------------------------------------
+# Create mount
+#------------------------------------
 cat << EOF >> ~/volume-pod.yaml
 apiVersion: v1
 kind: Pod
