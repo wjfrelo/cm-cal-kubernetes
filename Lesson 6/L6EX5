@@ -1,10 +1,23 @@
+##################################
+# Create Network for Communications
+##################################
+
+#----------------------------------
+# Create deployment with nginx as a container
+#----------------------------------
 
 kubectl create deployment nginx --image=nginx
-
 kubectl expose deployment nginx --port=80
 
+#----------------------------------
+# Create deployment with nginx as a container
+#----------------------------------
 kubectl get svc,pod
 
+
+#----------------------------------
+# Create deployment with nginx as a container
+#----------------------------------
 kubectl run busybox --rm -ti --image=busybox -- /bin/sh
 
 wget --spider --timeout=1 nginx
@@ -25,8 +38,21 @@ spec:
           access: "true"
 EOF
 
+#----------------------------------
+# Create deployment with nginx as a container
+#----------------------------------
 kubectl apply -f custom-network.yaml
 kubectl run busybox --rm -ti --image=busybox -- /bin/sh
 wget --spider --timeout=1 nginx
+
+# Type Exit and press enter to escape container
+exit
+
+#----------------------------------
+# Create deployment with nginx as a container
+#----------------------------------
 kubectl run busybox --rm -ti --labels="access=true" --image=busybox -- /bin/sh
 wget --spider --timeout=1 nginx
+
+# Type Exit and press enter to escape container
+exit
