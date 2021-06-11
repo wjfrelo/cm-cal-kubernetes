@@ -333,6 +333,9 @@ kubectl get svc -n kubernetes-dashboard
 kubectl get nodes -o wide
 <Copy listed Master Node IP>
 
+kubectl get all -n kubernetes dashboard
+<Get Port>
+
 #-----------------------------------
 # Open Desktop on Masternode and View Dashboard
 #---------------------------------
