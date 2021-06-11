@@ -57,26 +57,6 @@ spec:
       path: /data
       # this field is optional
       type: Directory
-cat > hostPath-pod.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-pd
-spec:
-  containers:
-  - image: k8s.gcr.io/test-webserver
-    name: test-container
-    volumeMounts:
-    - mountPath: /test-pd
-      name: test-volume
-  volumes:
-  - name: test-volume
-    hostPath:
-      # directory location on host
-      path: /data
-      # this field is optional
-      type: Directory
-EOF
 
 kubectl apply -f ~/hostPath-pod.yaml
 kubectl describe pod/test-pd
