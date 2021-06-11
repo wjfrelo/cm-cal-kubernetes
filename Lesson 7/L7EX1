@@ -57,7 +57,7 @@ spec:
       path: /data
       # this field is optional
       type: Directory
-
+EOF
 kubectl apply -f ~/hostPath-pod.yaml
 kubectl describe pod/test-pd
 
