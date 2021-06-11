@@ -1,6 +1,7 @@
 Commands:
 [SWITCH NAMESPACES] kubectl config set-context --current --namespace=kubernetes-dashboard
 [GET LOGS] kubectl logs kubernetes-dashboard-74d688b6bc-6ft6v
+[GET PORT INFO] kubectl get all -n kubernetes dashboard
 [CHEATSHEET] https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 
