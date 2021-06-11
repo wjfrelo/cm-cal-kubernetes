@@ -1,28 +1,45 @@
-Introduction to RBAC Authorization
+############################################
+# Update ClusterRoleBinding of a ServiceAccount in RBAC Authorization\
+############################################
 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+#--------------------------------------------
+# Update the ClusterRoleBinding of a ServiceAccount 
+#--------------------------------------------
+# Check kubernetes-dashboard  
+kubectl get clusterrolebindings
 
-kubectl get all -n kubernetes-dashboard
+# Convert clusterrolebinding to yaml
+kubectl get clusterrolebindings kubernetes-dashboard -o yaml > ~/crb.yml
 
-kubectl get svc -n kubernetes-dashboard
+# Update Cluster Role Name to cluster-admin
+vi crb.yml
 
-kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
 
-●	Update the Type from ClusterIP to NodePort
-type: NodePort
+# Delete existing, Create new, and Verify Updated ClusterRole
+kubectl delete -f crb.yml
+kubectl create -f crb.yml
+kubectl get clusterrolebinding
 
-# ●	List the running services to check the Type of kubernetes-dashboard service
-kubectl get svc -n kubernetes-dashboard
 
-# ●	List all the running nodes to get the Internal IP Address of the master node
+#-----------------------------------
+# Get IP of Master Node
+#-----------------------------------
 kubectl get nodes -o wide
+<Copy listed Master Node IP>
 
-# Copy the Internal-IP of the master node.
+#-----------------------------------
+# Open Desktop on Masternode and View Dashboard
+#---------------------------------
+<master-ip>:30083
 
-enter the following url:
-https://Internal-IP:Service-Port
 
+#--------------------------------------------
+# Access Dashboard with Updated Credentials
+#--------------------------------------------
+
+# Get Token
 kubectl -n kubernetes-dashboard describe secret \
 $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')
 
-# Include followow instructions
+# Configure in Browser
+

@@ -1,26 +1,17 @@
-Create Custom ClusterRole and ClusterRoleBinding
+############################################
+# Create Network Policy
+############################################
 
-kubectl create clusterrole custom-cluster-role --verb=list --verb=get \
---verb=delete --resource=pods --resource=services --resource=deployments
+cat << EOF >> deny-all-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+EOF
 
-kubectl get clusterrole
-
-kubectl get clusterrole custom-cluster-role view -o yaml
-
-kubectl create serviceaccount custom-service-account
-
-kubectl get sa
-
-kubectl get sa custom-service-account -o yaml
-
-kubectl create clusterrolebinding custom-clusterrole-binding \
---clusterrole=custom-cluster-role --serviceaccount=default:custom-service-account
-
-kubectl get clusterrolebinding
-
->> kubectl auth can-i delete pods \
---as=system:serviceaccount:default:custom-service-account
->> kubectl auth can-i list services \
---as=system:serviceaccount:default:custom-service-account
->> kubectl auth can-i delete configmaps \
---as=system:serviceaccount:default:custom-service-account
+kubectl apply -f deny-all-ingress.yaml
+kubectl delete -f deny-all-ingress.yaml

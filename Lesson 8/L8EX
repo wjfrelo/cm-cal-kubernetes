@@ -1,0 +1,95 @@
+############################################
+# Install and Configure CoreDNS
+############################################
+
+# install CoreDNS as default DNS service 
+kubeadm init --feature-gates CoreDNS=true
+
+# Upgrade the DNS service from kube-dns to CoreDNS 
+kubeadm upgrade plan  --feature-gates CoreDNS=true
+
+# List all the pods of kube-system namespace to check the CoreDNS Pod status
+kubectl -n kube-system get pods -o wide
+
+# Check the Deployments of kube-system namespace
+kubectl -n kube-system get deployments
+
+# check the default configuration of CoreDNS
+kubectl -n kube-system get configmap coredns -o yaml
+
+############################################
+# Weaveworks Introduction
+############################################
+
+# Install Weaveworks
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+kubectl get pods --namespaces kube-system
+
+kubectl run --image=weaveworks/hello-world hello
+kubectl get pods -o wide
+
+############################################
+# ClusterIP Service
+############################################
+
+# List running service
+kubectl get service
+
+kubectl describe service kubernetes
+kubectl describe service nginx
+kubectl get pods
+kubectl exec <NGINX-POD-NAME> -- printenv | grep SERVICE
+
+kubectl run curl --image=radial/busyboxplus:curl -i --tty
+nslookup nginx
+
+############################################
+# NodePort Service
+############################################
+
+cat << EOF >> node-port.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    name: mysql
+spec:
+  type: NodePort
+  ports:
+    - port: 3036
+      nodePort: 30036
+      name: http
+  selector:
+    name: mysql
+EOF
+
+kubectl apply -f node-port.yaml
+kubectl get service
+kubectl describe service mysql
+
+############################################
+# Create an Ingress with Multiple Paths
+############################################
+
+cat << EOF >> ingresssample.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: my-products
+          servicePort: 60000
+      - path: /discounted
+        backend:
+          serviceName: my-discounted-products
+          servicePort: 80
+EOF
+kubectl apply -f ingresssample.yaml
+
+kubectl get ingress my-ingress

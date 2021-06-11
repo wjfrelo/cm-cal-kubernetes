@@ -1,18 +1,24 @@
-Update ClusterRoleBinding of a ServiceAccount in RBAC Authorization
+############################################
+# Create Custome ClusterRole and ClusterRoleBinding
+############################################
+kubectl create clusterrole custom-cluster-role --verb=list --verb=get \
+--verb=delete --resource=pods --resource=services --resource=deployments
 
-Need GUI
+kubectl get clusterrole
 
-kubectl get clusterrolebindings
+kubectl get clusterrole custom-cluster-role view -o yaml
 
-kubectl get clusterrolebindings kubernetes-dashboard -o yaml > crb.yml
+kubectl create serviceaccount custom-service-account
 
-●	Update the crb.yml file to edit the ClusterRole to cluster-admin
-vi crb.yml
+kubectl get sa
 
-kubectl delete -f crb.yml
+kubectl get sa custom-service-account -o yaml
 
-kubectl create -f crb.yml
+kubectl create clusterrolebinding custom-clusterrole-binding \
+--clusterrole=custom-cluster-role --serviceaccount=default:custom-service-account
 
 kubectl get clusterrolebinding
 
-https://Internal-IP:Service-Port
+kubectl auth can-i delete pods --as=system:serviceaccount:default:custom-service-account
+kubectl auth can-i list services --as=system:serviceaccount:default:custom-service-account
+kubectl auth can-i delete configmaps --as=system:serviceaccount:default:custom-service-account

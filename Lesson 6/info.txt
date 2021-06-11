@@ -1,1 +1,37 @@
-SECURITY AND AUTHENTICATION
+Commands:
+[SWITCH NAMESPACES] kubectl config set-context --current --namespace=kubernetes-dashboard
+[GET LOGS] kubectl logs kubernetes-dashboard-74d688b6bc-6ft6v
+[CHEATSHEET] https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+
+Role-based access control (RBAC) is a method of regulating access to 
+computer or network resources based on the roles of individual 
+users within your organization.
+
+RBAC Objects: Role, ClusterRole, RoleBinding and ClusterRoleBinding
+
+RBAC Role or ClusterRole contains rules that represent a set of permissions. 
+Permissions are purely additive (there are no "deny" rules).
+
+- An RBAC Role or ClusterRole contains rules that represent a set of permissions. 
+  Permissions are purely additive (there are no "deny" rules).
+- A Role always sets permissions within a particular namespace; 
+  when you create a Role, you have to specify the namespace it belongs in.
+- ClusterRole, by contrast, is a non-namespaced resource
+
+Role: always sets permissions within a particular namespace; when you create a 
+      Role, you have to specify the namespace it belongs in
+
+ClusterRole: a non-namespaced resource. ClusterRoles have several uses. You can use a ClusterRole to:
+      - define permissions on namespaced resources and be granted within individual namespace(s)
+      - define permissions on namespaced resources and be granted across all namespaces
+      - define permissions on cluster-scoped resources.
+
+A role binding grants the permissions defined in a role to a user or set of users. 
+It holds a list of subjects (users, groups, or service accounts), and a reference 
+to the role being granted. A RoleBinding grants permissions within a specific 
+namespace whereas a ClusterRoleBinding grants that access cluster-wide.
+
+To grant permissions across a whole cluster, you can use a ClusterRoleBinding. The following 
+ClusterRoleBinding allows any user in the group "manager" to read secrets in any namespace.
+namespaced resources (like Pods), across all namespaces
