@@ -66,6 +66,7 @@ spec:
       # this field is optional
       type: Directory
 EOF
+
 kubectl apply -f ~/hostPath-pod.yaml
 kubectl describe pod/test-pd
 
@@ -127,9 +128,10 @@ spec:
       - name: nfs
         persistentVolumeClaim:
           claimName: nfs
+EOF
 
- kubectl apply -f ~/nfs-share-pod.yaml
- kubectl describe pod/test-pd
+kubectl apply -f ~/nfs-share-pod.yaml
+kubectl describe pod/test-pd
 
 ############################################
 # Create a PersistentVolume with Declarative (YAML)
