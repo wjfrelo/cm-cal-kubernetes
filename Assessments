@@ -1,0 +1,47 @@
+Social Media Underlying Infra Challenges
+
+Section 1: Project and Developer Details:
+
+Project Description: As a Kubernetes  Developer, complete the features of the application scalability by 
+                     demonstrating how to create a deployment with a defined replica set and how to auto scale the 
+		     application based on CPU utilization.
+
+Operations:
+
+- Deploy an application (NGINX) on Kubernetes cluster with a replica set of 3
+  * Deployment or create Replicaset (Refer to L4EX1)
+- Manually resize a cluster to increase or decrease the number of nodes in that cluster using taint
+  * Not sure if this really works. Taint,Tolerations
+  - https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+- Create a horizontal pod autoscaler that maintains between 3 and 10 replicas of the Pods controlled by the 
+  deployment based on CPU utilization
+  - Refer to L4EX1, Line 123
+  - https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#create-horizontal-pod-autoscaler
+- Increase the load by sending a very high number of requests to the service
+  - https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#create-horizontal-pod-autoscaler
+
+- Solve underlying infra challenges by utilizing resources that are needed at any given moment, and automatically get additional resources when demand increases CPU utilization above 60%
+  -https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#create-horizontal-pod-autoscaler
+
+
+
+Accessing Software Application in a Cluster
+
+ 
+
+Section 1: Project and developer details:
+
+Project Description: As a Kubernetes developer, demonstrate the usage of Volume to communicate between two Containers running in the same Pod. Check the health of the running pod by describing it with the list of events, inspecting its logs, and finally debugging its containers.
+
+Operations:
+
+Create a Pod that runs two Containers
+- View L4EX17
+Ensure that the pod has a shared volume that can be used by both containers to communicate with each other
+Write an HTML file in one container and try accessing it from another container
+Describe the running pod to check its health
+-  https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+Inspect the pod logs to check if any container is crashing or not
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods
+Debug the individual containers for more detailed information
+- https://kubernetes.io/docs/tasks/debug-application-cluster/debug-running-pod/

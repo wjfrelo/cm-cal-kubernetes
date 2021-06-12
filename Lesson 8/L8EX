@@ -1,34 +1,4 @@
 ############################################
-# Install and Configure CoreDNS
-############################################
-
-# install CoreDNS as default DNS service 
-kubeadm init --feature-gates CoreDNS=true
-
-# Upgrade the DNS service from kube-dns to CoreDNS 
-kubeadm upgrade plan  --feature-gates CoreDNS=true
-
-# List all the pods of kube-system namespace to check the CoreDNS Pod status
-kubectl -n kube-system get pods -o wide
-
-# Check the Deployments of kube-system namespace
-kubectl -n kube-system get deployments
-
-# check the default configuration of CoreDNS
-kubectl -n kube-system get configmap coredns -o yaml
-
-############################################
-# Weaveworks Introduction
-############################################
-
-# Install Weaveworks
-kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-kubectl get pods --namespaces kube-system
-
-kubectl run --image=weaveworks/hello-world hello
-kubectl get pods -o wide
-
-############################################
 # ClusterIP Service
 ############################################
 
